@@ -107,6 +107,7 @@ export const handleTransaction = async (
         }, 60000);
 
         // Sign and send the transaction
+        console.log(`Sending ${proofType} Transaction...`)
         submitProof.signAndSend(account, async ({ events, status, dispatchError }) => {
             try {
                 if (status.isInBlock) {

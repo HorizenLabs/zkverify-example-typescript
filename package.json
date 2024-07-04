@@ -5,9 +5,9 @@
   "author": "Horizen Labs <info@horizenlabs.io>",
   "scripts": {
     "fflonk": "cp .env.testnet .env && ts-node ./src/index.ts fflonk",
-    "boojum": "cp .env.testnet .env && ts-node ./submit_proof boojum",
-    "risc0": "cp .env.testnet .env && ts-node ./submit_proof risc0",
-    "groth16": "cp .env.testnet .env && ts-node ./submit_proof groth16"
+    "boojum": "cp .env.testnet .env && ts-node ./src/index.ts boojum",
+    "risc0": "cp .env.testnet .env && ts-node ./src/index.ts risc0",
+    "groth16": "cp .env.testnet .env && ts-node ./src/index.ts groth16"
   },
   "devDependencies": {
     "@babel/preset-env": "7.21.5",

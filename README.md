@@ -15,7 +15,7 @@ npm install
 Send a supported proof by running the following and specifying the proof type
 
 ```shell
-ts-node ./submit_proof fflonk
+ts-node ./src/index fflonk
 ```
 
 Or via npm:

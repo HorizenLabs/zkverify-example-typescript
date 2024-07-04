@@ -2,6 +2,8 @@ import 'dotenv/config';
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import { SubmittableExtrinsic } from '@polkadot/api/types';
 import { Keyring } from '@polkadot/keyring';
+import { KeyringPair } from '@polkadot/keyring/types';
+import { AccountInfo } from '@polkadot/types/interfaces';
 import { proofs } from './proofs';
 import { createApi, waitForNodeToSync } from './helpers';
 import { handleTransaction } from './transactions';
@@ -12,8 +14,10 @@ import { handleTransaction } from './transactions';
  */
 const validateEnvVariables = (variables: string[]): void => {
     variables.forEach(envVar => {
-        if (!process.env[envVar]) {
-            throw new Error(`Required environment variable ${envVar} is not set.`);
+        const value = process.env[envVar];
+        if (!value || value === 'INSERT_PRIVATE_KEY_PHRASE') {
+            console.error(`Required environment variable ${envVar} is not set or is set to the default value.`);
+            process.exit(1);
         }
     });
 };
@@ -25,7 +29,7 @@ const validateEnvVariables = (variables: string[]): void => {
  * @param params - The parameters for the proof submission.
  * @returns The constructed extrinsic object.
  */
-const constructProofExtrinsic = (api: ApiPromise, pallet: string, params: any[]): SubmittableExtrinsic<"promise"> => {
+const constructProofExtrinsic = (api: ApiPromise, pallet: string, params: any[]): SubmittableExtrinsic<'promise'> => {
     return api.tx[pallet].submitProof(...params);
 };
 
@@ -35,11 +39,43 @@ const constructProofExtrinsic = (api: ApiPromise, pallet: string, params: any[])
  * @returns The corresponding pallet and params.
  */
 const getProofDetails = (proofType: string) => {
+    if (!proofType) {
+        console.error('Proof type is not provided.');
+        process.exit(1);
+    }
     const proof = proofs[proofType];
     if (!proof) {
-        throw new Error(`Proof type ${proofType} is not valid or not provided.`);
+        console.error(`Proof type ${proofType} is not valid.`);
+        process.exit(1);
     }
     return proof;
+};
+
+/**
+ * Creates and validates the keyring account.
+ * @param keyring - The keyring instance.
+ * @param api - The ApiPromise instance.
+ * @returns {Promise<KeyringPair>} - The created account.
+ */
+const createAndValidateAccount = async (keyring: Keyring, api: ApiPromise): Promise<KeyringPair> => {
+    let account: KeyringPair;
+    try {
+        account = keyring.addFromUri(process.env.PRIVATE_KEY as string);
+    } catch (error) {
+        console.error('Failed to open the wallet. Please check the PRIVATE_KEY value.', (error as Error).message);
+        process.exit(1);
+    }
+
+    // Check account balance
+    const { address } = account;
+    const accountInfo = await api.query.system.account(address) as AccountInfo;
+    const balance = accountInfo.data.free;
+    if (balance.isZero()) {
+        console.error('The account has insufficient funds.');
+        process.exit(1);
+    }
+
+    return account;
 };
 
 /**
@@ -54,19 +90,20 @@ const main = async (): Promise<void> => {
 
     const timerRefs = { interval: null as NodeJS.Timeout | null, timeout: null as NodeJS.Timeout | null };
     const keyring = new Keyring({ type: 'sr25519' });
-    const account = keyring.addFromUri(process.env.PRIVATE_KEY as string);
+    const account = await createAndValidateAccount(keyring, api);
 
-    const { pallet, params } = getProofDetails(process.argv[2]);
+    const proofType = process.argv[2];
+    const { pallet, params } = getProofDetails(proofType);
 
-    console.log(`Constructing proof extrinsic...`);
+    console.log(`Constructing ${proofType} proof extrinsic...`);
     const extrinsic = constructProofExtrinsic(api, pallet, params);
     const startTime = Date.now();
 
     try {
-        const result = await handleTransaction(api, extrinsic, account, process.argv[2], startTime, timerRefs);
+        const result = await handleTransaction(api, extrinsic, account, proofType, startTime, timerRefs);
         console.log(`Transaction result: ${result}`);
     } catch (error) {
-        console.error(`Error sending proof:`, error);
+        console.error(`Error sending proof:`, (error as Error).message);
     } finally {
         await api.disconnect();
         await provider.disconnect();
@@ -74,6 +111,6 @@ const main = async (): Promise<void> => {
 };
 
 main().catch(error => {
-    console.error('Unhandled error in main function:', error);
+    console.error('Unhandled error in main function:', (error as Error).message);
     process.exit(1);
 });
