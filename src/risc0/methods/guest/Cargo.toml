@@ -1,0 +1,13 @@
+[package]
+name = "multiply"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "multiply"
+path = "src/bin/multiply.rs"
+
+[workspace]
+
+[dependencies]
+risc0-zkvm = { version = "1.0.4", default-features = false }

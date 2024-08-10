@@ -1,0 +1,18 @@
+{
+  "proofs": [
+    {
+      "type": "groth16",
+      "rate": 1,
+      "interval": 5,
+      "duration": 60,
+      "skipAttestation": true
+    },
+    {
+      "type": "fflonk",
+      "rate": 1,
+      "interval": 10,
+      "duration": 120,
+      "skipAttestation": true
+    }
+  ]
+}
