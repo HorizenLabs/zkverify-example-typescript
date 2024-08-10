@@ -91,4 +91,3 @@ For example `src/risc0/handler/index.ts`
 
 *WEBSOCKET*: The WebSocket endpoint of your Substrate node.
 *SEED_PHRASE*: The seed phrase of the account used for submitting transactions.
-
