@@ -27,11 +27,11 @@ if ! contains "$PROOF_TYPE" "${ACCEPTED_PROOF_TYPES[@]}"; then
   exit 1
 fi
 
-POWERS_OF_TAU_DIR=$(pwd)/powers-of-tau
+POWERS_OF_TAU_DIR=$(pwd)/src/powers-of-tau
 
 if [ "$PROOF_TYPE" == "groth16" ] || [ "$PROOF_TYPE" == "fflonk" ]; then
   if [ ! -d "$POWERS_OF_TAU_DIR" ]; then
-    ./setup-scripts/setup_powers_of_tau.sh
+    ./src/setup-scripts/setup_powers_of_tau.sh
     if [ $? -ne 0 ]; then
       echo "Powers of Tau setup failed. Exiting."
       exit 1
@@ -40,7 +40,7 @@ if [ "$PROOF_TYPE" == "groth16" ] || [ "$PROOF_TYPE" == "fflonk" ]; then
     read -p "Powers of Tau directory exists. Do you want to regenerate it? (y/n): " confirm
     if [ "$confirm" == "y" ]; then
       rm -rf "$POWERS_OF_TAU_DIR"
-      ./setup-scripts/setup_powers_of_tau.sh
+      ./src/setup-scripts/setup_powers_of_tau.sh
       if [ $? -ne 0 ]; then
         echo "Powers of Tau setup failed. Exiting."
         exit 1
@@ -51,15 +51,15 @@ fi
 
 case "$PROOF_TYPE" in
   groth16)
-    ./setup-scripts/setup_groth16.sh
+    ./src/setup-scripts/setup_groth16.sh
     ;;
   fflonk)
-    ./setup-scripts/setup_fflonk.sh
+    ./src/setup-scripts/setup_fflonk.sh
     ;;
   boojum)
-    ./setup-scripts/setup_boojum.sh
+    ./src/setup-scripts/setup_boojum.sh
     ;;
   risc0)
-    ./setup-scripts/setup_risc0.sh
+    ./src/setup-scripts/setup_risc0.sh
     ;;
 esac

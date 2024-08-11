@@ -17,7 +17,6 @@ cargo build --release
 3. Specify a file to output proof inputs to
 ```
 ./target/release/prove --a 17 --b 23 --output ${filepath}
-```
 ## Verify A Proof (Using risc0)
 
 ```
