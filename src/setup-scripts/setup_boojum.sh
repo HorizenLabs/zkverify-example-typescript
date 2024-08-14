@@ -1,11 +1,8 @@
 #!/bin/bash
 set -e
+source ./src/setup-scripts/common.sh
 
-SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-
-source "$SCRIPT_DIR/common.sh"
-
-PROOF_GENERATOR_DIR=$(cd "$SCRIPT_DIR/.." && pwd)
+PROOF_GENERATOR_DIR=$(pwd)
 BOOJUM_REPO_DIR="$PROOF_GENERATOR_DIR/repos/era-boojum"
 CIRCUIT_DIR="$PROOF_GENERATOR_DIR/boojum"
 RUST_VERSION="nightly-2024-05-07" # Specific nightly version used in their CI

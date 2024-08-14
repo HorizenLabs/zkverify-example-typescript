@@ -1,10 +1,10 @@
 #!/bin/bash
 set -e
-source ./common.sh
+source ./src/setup-scripts/common.sh
 
 PROOF_GENERATOR_DIR=$(pwd)
-POWERS_OF_TAU_DIR="$PROOF_GENERATOR_DIR/powers-of-tau"
-CIRCUIT_DIR="$PROOF_GENERATOR_DIR/fflonk/circuit"
+POWERS_OF_TAU_DIR="$PROOF_GENERATOR_DIR/src/powers-of-tau"
+CIRCUIT_DIR="$PROOF_GENERATOR_DIR/src/fflonk/circuit"
 CIRCUIT_JS_DIR="$CIRCUIT_DIR/circuit_js"
 ZKEY_DIR="${CIRCUIT_DIR}/zkey"
 PROOF_DIR="${CIRCUIT_DIR}/proof"

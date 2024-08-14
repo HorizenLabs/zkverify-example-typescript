@@ -60,13 +60,13 @@ Each proof type has a types.ts within its directory that shows the structure of 
 
 ## Proof Specific Setup
 
-Run the necessary setup scripts for the proof type, e.g. the risc0 will generate the required target folder used in the risc0 handler:
+From the root directory, run the necessary setup scripts for the proof type, e.g. the risc0 will generate the required target folder used in the risc0 handler:
 
 ```sh
-./setup.sh risc0
-./setup.sh groth16
-./setup.sh fflonk
-./setup.sh boojum
+./src/setup.sh risc0
+./src/setup.sh groth16
+./src/setup.sh fflonk
+./src/setup.sh boojum
 ```
 
 ### Generating and sending a single unique proof

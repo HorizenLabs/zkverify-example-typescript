@@ -1,9 +1,9 @@
 #!/bin/bash
 set -e
 
-source ./common.sh
+source ./src/setup-scripts/common.sh
 
-POWERS_OF_TAU_DIR="./powers-of-tau"
+POWERS_OF_TAU_DIR="./src/powers-of-tau"
 
 setup_powers_of_tau_directory() {
   confirm_deletion "$POWERS_OF_TAU_DIR"

@@ -2,11 +2,9 @@
 
 set -e
 
-SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+source ./src/setup-scripts/common.sh
 
-source "$SCRIPT_DIR/common.sh"
-
-PROOF_GENERATOR_DIR=$(cd "$SCRIPT_DIR/.." && pwd)
+PROOF_GENERATOR_DIR=$(pwd)
 PROJECT_DIR="$PROOF_GENERATOR_DIR/risc0"
 DATA_DIR="$PROJECT_DIR/data"
 
